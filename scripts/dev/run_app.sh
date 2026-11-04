@@ -240,8 +240,14 @@ PLIST
 # for use in process") — disable library validation for the ad-hoc fallback
 # only; real identities keep the release entitlement surface.
 SIGN_ENTITLEMENTS="$APP_ENTITLEMENTS"
-if [[ "$CODESIGN_IDENTITY" == "-" ]]; then
-  echo "  note: no codesigning identity found; ad-hoc signing with library validation disabled"
+# A self-signed identity (no OU / Team ID) keeps TCC grants stable across
+# rebuilds but, like ad-hoc, cannot pass library validation for Sparkle.
+identity_has_team_id() {
+  security find-certificate -c "$1" -p 2>/dev/null \
+    | openssl x509 -noout -subject 2>/dev/null | grep -q "OU *="
+}
+if [[ "$CODESIGN_IDENTITY" == "-" ]] || ! identity_has_team_id "$CODESIGN_IDENTITY"; then
+  echo "  note: ad-hoc or self-signed identity; library validation disabled"
   SIGN_ENTITLEMENTS="$(mktemp -t macparakeet-dev-entitlements)"
   trap 'rm -f "$SIGN_ENTITLEMENTS"' EXIT
   cp "$APP_ENTITLEMENTS" "$SIGN_ENTITLEMENTS"

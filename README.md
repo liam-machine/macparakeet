@@ -4,6 +4,30 @@
 
 <h1 align="center">MacParakeet</h1>
 
+> [!NOTE]
+> **This is a fork: [liam-machine/macparakeet](https://github.com/liam-machine/macparakeet), branch `voice-profiles`.**
+> It is upstream MacParakeet plus experimental speaker features that the official app keeps switched off:
+>
+> - **Voice profiles on.** Name a speaker once and later meetings suggest that name when the voice returns.
+> - **Your own voice.** Set *Settings → Capture → Meetings → Your name*, then use *Remember My Voice* on your row in a meeting.
+> - **Microphone voices separated.** People sharing your microphone get their own "Room N" speaker, and call audio that leaks back into your microphone is credited to the person on the call.
+> - **Hybrid speaker detection.** NVIDIA Nemotron (Sortformer) decides *when* each person speaks; Community-1 decides which stretches belong to the same person.
+> - **TitaNet voiceprints.** Saved voices are matched with NVIDIA TitaNet-Large, and when you click a speaker's name to label it, the box opens on the recognised person's name.
+>
+> **How voice profiles work.** After a meeting, each speaker's speech (minus any overlap with other people) is cut into 10-second windows and run through TitaNet-Large on your Mac, giving a 192-number voiceprint per person. Each voiceprint is compared with your saved voices: a name is suggested when the closest one is within 0.40 (cosine distance) and beats the runner-up by 0.10. Suggestions always wait for your confirmation. Call audio and a room microphone make the same person sound different (0.5–0.6 apart), so save each person once from each if you want them recognised both ways. The model (84 MB, [CC-BY-4.0, NVIDIA](https://huggingface.co/nvidia/speakerverification_en_titanet_large)) downloads once from this fork's [`titanet-large-coreml-v1`](https://github.com/liam-machine/macparakeet/releases/tag/titanet-large-coreml-v1) release and is checked against a SHA-256 before use. Audio and voiceprints never leave your Mac.
+>
+> **Install (Apple Silicon, macOS 14.2+):** download `MacParakeet-Dev-voice-profiles.zip` from the [latest release](https://github.com/liam-machine/macparakeet/releases/latest), unzip, drag **MacParakeet Dev** to Applications and open it. The first time, macOS blocks it because it is not notarised by Apple: open *System Settings → Privacy & Security*, scroll down and click **Open Anyway**. It installs as a separate app (*MacParakeet Dev*, its own data folder), so it does not touch an official MacParakeet install. Then, in *Settings → Capture → Meetings*, turn on **Speaker detection** and **Remember speakers** and type your name in **Your name**.
+>
+> **Installing with Claude Code:** ask Claude to run
+> `curl -L -o /tmp/mpd.zip https://github.com/liam-machine/macparakeet/releases/latest/download/MacParakeet-Dev-voice-profiles.zip && rm -rf /tmp/mpd /Applications/MacParakeet-Dev.app && ditto -x -k /tmp/mpd.zip /tmp/mpd && mv /tmp/mpd/MacParakeet-Dev.app /Applications/ && open /Applications/MacParakeet-Dev.app`,
+> then click **Open Anyway** yourself as above.
+>
+> **Upgrading from an earlier fork build:** voices saved before TitaNet were made with a different model and can't be compared, so they show as needing to be saved again. Rename and *Remember* each person once in a new meeting.
+>
+> **Build it yourself:** `MACPARAKEET_CONFIG=Release scripts/dev/run_app.sh` (needs Xcode). Set `MACPARAKEET_CODESIGN_IDENTITY` to a code-signing certificate's name to keep macOS permissions across rebuilds.
+>
+> These features are experimental and not part of an official release; report problems to the fork, not upstream.
+
 <p align="center">
   Fast, private, local-first voice app for Apple Silicon Macs. Free and open-source.
 </p>
