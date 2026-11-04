@@ -4,6 +4,21 @@
 
 <h1 align="center">MacParakeet</h1>
 
+> [!NOTE]
+> **This is a fork: [liam-machine/macparakeet](https://github.com/liam-machine/macparakeet), branch `voice-profiles`.**
+> It is upstream MacParakeet plus experimental speaker features that the official app keeps switched off:
+>
+> - **Voice profiles on.** Name a speaker once and later meetings suggest that name when the voice returns.
+> - **Your own voice.** Set *Settings → Capture → Meetings → Your name*, then use *Remember My Voice* on your row in a meeting.
+> - **Microphone voices separated.** People sharing your microphone get their own "Room N" speaker, and call audio that leaks back into your microphone is credited to the person on the call.
+> - **Hybrid speaker detection.** NVIDIA Nemotron (Sortformer) decides *when* each person speaks; Community-1 voice fingerprints decide *who* they are.
+>
+> **Install (Apple Silicon, macOS 14.2+):** download `MacParakeet-Dev-voice-profiles.zip` from [Releases](https://github.com/liam-machine/macparakeet/releases), unzip, drag **MacParakeet Dev** to Applications and open it. The first time, macOS blocks it because it is not notarised by Apple: open *System Settings → Privacy & Security*, scroll down and click **Open Anyway**. It installs as a separate app (*MacParakeet Dev*, its own data folder), so it does not touch an official MacParakeet install. Everything stays on your Mac, as upstream.
+>
+> **Build it yourself:** `MACPARAKEET_CONFIG=Release scripts/dev/run_app.sh` (needs Xcode). Set `MACPARAKEET_CODESIGN_IDENTITY` to a code-signing certificate's name to keep macOS permissions across rebuilds.
+>
+> These features are experimental and not part of an official release; report problems to the fork, not upstream.
+
 <p align="center">
   Fast, private, local-first voice app for Apple Silicon Macs. Free and open-source.
 </p>

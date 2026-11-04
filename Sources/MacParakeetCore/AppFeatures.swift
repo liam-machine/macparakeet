@@ -45,7 +45,7 @@ public enum AppFeatures {
     }
 
     /// Experimental speaker recognition; requires held-out meeting evaluation.
-    public static let voiceProfilesEnabled: Bool = false
+    public static let voiceProfilesEnabled: Bool = true // liam-machine fork: on. Upstream keeps this off until release evaluation.
     public static let voiceProfilesDeveloperLaunchArgument = "--enable-voice-profiles"
 
     /// A saved preference or a development launch argument cannot unlock an
